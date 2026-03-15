@@ -28,7 +28,7 @@ enunciado_id = st.markdown(f""" ### Exercício {exercicio_id}: {enun['enunciado'
 
                             """
                            )
-st.subheader("Submeter Código:")
+#st.subheader("Submeter Código:")
 codigo = st.text_area("Cole seu código aqui:", height=200)
 
 col1, col2, col3 = st.columns(3)
