@@ -3,6 +3,19 @@ import requests
 
 BASE_URL = "https://sti2-production.up.railway.app/"
 
+with st.expander("Sobre o sistema", expanded=True):
+    st.markdown('''
+# Tutor Inteligente de Programação em Python
+
+Este sistema tem como intenção guiar o usuário em uma jornada de aprendizado orientada a exercícios, capacitando-o usar lógica de programação fluentemente, manipular estruturas de dados, das mais simples às mais complexas, proporcionando ajuda específica para as dificuldades que apareçam pelo caminho.
+
+* O Sistema ainda está em fase Beta, precisa de ajustes na submissão de respostas que não foram realizadas ainda por falta do recurso de tempo;
+
+* Além dos ajustes indispensáveis para um fluxo ideal do sistema, há polimentos que podem melhorar o que já funciona como: expansão do banco de questôes, login de usuário, planejamento de uma trilha de aprendizado com escolha de temática pelo aluno, etc.
+
+### Teste os módulos de Feedback, Ver resposta e Dicas! Todos integrados com a LLM do Google Gemini!                 
+''')
+
 st.title("Tutor Inteligente de Programação")
 
 st.sidebar.header("Ações")
@@ -28,7 +41,7 @@ enunciado_id = st.markdown(f""" ### Exercício {exercicio_id}: {enun['enunciado'
 
                             """
                            )
-st.subheader("Submeter Código:")
+
 codigo = st.text_area("Cole seu código aqui:", height=200)
 
 col1, col2, col3 = st.columns(3)
@@ -105,4 +118,5 @@ with col3:
                 st.error(erro)
             except:
                 st.error("Erro inesperado no servidor")
+st.write('Planejado e Realizado por: Gabriela Tenório, Laís Souza e José Victor.')
 
