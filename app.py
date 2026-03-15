@@ -28,21 +28,29 @@ enunciado_id = st.markdown(f""" ### Exercício {exercicio_id}: {enun['enunciado'
 
                             """
                            )
-#st.subheader("Submeter Código:")
+st.subheader("Submeter Código:")
 codigo = st.text_area("Cole seu código aqui:", height=200)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("Avaliar Código"):
-        payload = {"aluno_id": aluno_id, "exercicio_id": exercicio_id, "codigo": codigo}
-        res = requests.post(f"{BASE_URL}/tentativas/avaliar", json=payload)
+    if st.button("Ver Dicas do Exercício"):
+        params = {
+            "exercicio_id": exercicio_id,
+            'codigo': "enumere dicas curtas para resolver esse exercício"
+        }
+        res = requests.post(f"{BASE_URL}/alunos/{aluno_id}/feedback", params=params)
         if res.status_code == 200:
-            r = res.json()
-            st.success(f"Passou nos testes? {'Sim' if r['passou_testes'] else 'Não'}")
-            st.info(f"Pontos ganhos: {r['pontos_ganhos']}")
+            dicas = res.json()
+            if dicas:
+                st.markdown("### 📌 Dicas:")
+                st.info(dicas["feedback"])                
         else:
-            st.error("Erro ao avaliar o código.")
+            try:
+                erro = res.json()["detail"]
+                st.error(erro)
+            except:
+                st.error("Erro inesperado no servidor")
 
 with col2:
     if st.button("Obter Feedback da IA"):
@@ -56,9 +64,11 @@ with col2:
             st.markdown("### 💡 Feedback:")
             st.info(r["feedback"])
         else:
-            st.error("Erro ao obter feedback.")
-            st.text(f"Status: {res.status_code}")
-            st.text(f"Resposta: {res.text}")
+            try:
+                erro = res.json()["detail"]
+                st.error(erro)
+            except:
+                st.error("Erro inesperado no servidor")
     if st.button("Desistir e Ver Resposta"):
         params = {
             "codigo": codigo
@@ -73,21 +83,26 @@ with col2:
             st.markdown("### ✅ Solução:")
             st.info(r["resolucao_llm"])
         else:
-            st.error("Erro ao obter feedback.")
-            st.text(f"Status: {res.status_code}")
-            st.text(f"Resposta: {res.text}")
+            try:
+                erro = res.json()["detail"]
+                st.error(erro)
+            except:
+                st.error("Erro inesperado no servidor")
+
+
 
 with col3:
-    if st.button("Ver Dicas do Exercício"):
-        params = {
-            "exercicio_id": exercicio_id,
-            'codigo': "enumere dicas curtas para resolver esse exercício"
-        }
-        res = requests.post(f"{BASE_URL}/alunos/{aluno_id}/feedback", params=params)
+    if st.button("Enviar Resposta Final"):
+        payload = {"aluno_id": aluno_id, "exercicio_id": exercicio_id, "codigo": codigo}
+        res = requests.post(f"{BASE_URL}/tentativas/avaliar", json=payload)
         if res.status_code == 200:
-            dicas = res.json()
-            if dicas:
-                st.markdown("### 📌 Dicas:")
-                st.info(dicas["feedback"])                
+            r = res.json()
+            st.success(f"Passou nos testes? {'Sim' if r['passou_testes'] else 'Não'}")
+            st.info(f"Pontos ganhos: {r['pontos_ganhos']}")
         else:
-            st.error("Erro ao buscar dicas.")
+            try:
+                erro = res.json()["detail"]
+                st.error(erro)
+            except:
+                st.error("Erro inesperado no servidor")
+
