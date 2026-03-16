@@ -9,9 +9,7 @@ with st.expander("Sobre o sistema", expanded=True):
 
 Este sistema tem como intenção guiar o usuário em uma jornada de aprendizado orientada a exercícios, capacitando-o usar lógica de programação fluentemente, manipular estruturas de dados, das mais simples às mais complexas, proporcionando ajuda específica para as dificuldades que apareçam pelo caminho.
 
-* O Sistema ainda está em fase Beta, precisa de ajustes na submissão de respostas que não foram realizadas ainda por falta do recurso de tempo;
-
-* Além dos ajustes indispensáveis para um fluxo ideal do sistema, há polimentos que podem melhorar o que já funciona como: expansão do banco de questôes, login de usuário, planejamento de uma trilha de aprendizado com escolha de temática pelo aluno, etc.
+* Há polimentos que podem melhorar o que já funciona como: expansão do banco de questões, login de usuário, planejamento de uma trilha de aprendizado com escolha de temática pelo aluno, etc.
 
 ### Teste os módulos de Feedback, Ver resposta e Dicas! Todos integrados com a LLM do Google Gemini!                 
 ''')
@@ -41,8 +39,26 @@ enunciado_id = st.markdown(f""" ### Exercício {exercicio_id}: {enun['enunciado'
 
                             """
                            )
+if "show_warning" not in st.session_state:
+    st.session_state.show_warning = True
 
+
+if st.session_state.show_warning:
+    col1, col2 = st.columns([10,1])
+
+    with col1:
+        st.warning('''⚠️ Sua solução deve estar no formato:\n 
+        class Solution:\n 
+           def Sua_Funcao(self, Seus_Parametros):\n
+                Seu_Código\n 
+                return
+        ''')
+    with col2:
+        if st.button("✖"):
+            st.session_state.show_warning = False
+            st.rerun()
 codigo = st.text_area("Cole seu código aqui:", height=200)
+
 
 col1, col2, col3 = st.columns(3)
 
