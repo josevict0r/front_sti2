@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-BASE_URL = "https://sti2-production.up.railway.app/"
+BASE_URL = "https://sti2.onrender.com/"
 
 with st.expander("Sobre o sistema", expanded=True):
     st.markdown('''
